@@ -4,6 +4,8 @@ import ch.makery.address.MainApp;
 import ch.makery.address.model.Person;
 import ch.makery.address.util.DateUtil;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -76,7 +78,7 @@ public class PersonOverviewController {
 		if(person != null){
 			//fill the labels with info from person object
 			firstNameLabel.setText(person.getFirstName());
-			lastNameLabel.setText(person.getFirstName());
+			lastNameLabel.setText(person.getLastName());
 			streetLabel.setText(person.getStreet());
 			postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
 			cityLabel.setText(person.getCity());
@@ -89,7 +91,43 @@ public class PersonOverviewController {
 			lastNameLabel.setText("");
 			streetLabel.setText("");
 			postalCodeLabel.setText("");
+			cityLabel.setText("");
 			birthdayLabel.setText("");
+		}
+	}
+
+	//called when the user clicks the new button.
+	// opens a dialog to edit details for a new person
+
+	@FXML
+	private void handleNewPerson(){
+		Person tempPerson = new Person();
+		boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
+		if(okClicked){
+			mainApp.getPersonData().add(tempPerson);
+		}
+	}
+
+	//called when the user clicks the edit button. opens a dialog to edit
+	//details for the selected person
+
+	@FXML
+	private void handlEditPerson(){
+		Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+		if(selectedPerson != null){
+			boolean okClicked = mainApp.showPersonEditDialog(selectedPerson);
+			if(okClicked){
+				showPersonDetails(selectedPerson);
+			}
+		} else {
+			//nothing selected
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Person Selected");
+			alert.setContentText("Please select a person in the table.");
+
+			alert.showAndWait();
 		}
 	}
 
@@ -98,7 +136,20 @@ public class PersonOverviewController {
 	@FXML
 	private void handleDeletePerson(){
 		int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
-		personTable.getItems().remove(selectedIndex);
+		if(selectedIndex >= 0){
+			personTable.getItems().remove(selectedIndex);
+
+		} else {
+			//nothing selected
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("No selection");
+			alert.setHeaderText("No person Selected");
+			alert.setContentText("Please select a person in the table.");
+
+			alert.showAndWait();
+		}
+
 
 	}
 }
