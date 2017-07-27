@@ -2,6 +2,9 @@ package ch.makery.address.model;
 
 import java.time.LocalDate;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import ch.makery.address.util.LocalDateAdapter;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -9,107 +12,114 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Model class for a Person.
+ *
+ * @author Marco Jakob
+ */
 public class Person {
 
-	private final StringProperty firstName;
-	private final StringProperty lastName;
-	private final StringProperty street;
-	private final IntegerProperty postalCode;
-	private final StringProperty city;
-	private final ObjectProperty<LocalDate> birthday;
+    private final StringProperty firstName;
+    private final StringProperty lastName;
+    private final StringProperty street;
+    private final IntegerProperty postalCode;
+    private final StringProperty city;
+    private final ObjectProperty<LocalDate> birthday;
 
-	// default constructor
+    /**
+     * Default constructor.
+     */
+    public Person() {
+        this(null, null);
+    }
 
-	public Person() {
-		this(null, null);
-	}
+    /**
+     * Constructor with some initial data.
+     *
+     * @param firstName
+     * @param lastName
+     */
+    public Person(String firstName, String lastName) {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
 
-	// constructor with initial data
-	// @param firstname
-	// @param lastname
+        // Some initial dummy data, just for convenient testing.
+        this.street = new SimpleStringProperty("some street");
+        this.postalCode = new SimpleIntegerProperty(1234);
+        this.city = new SimpleStringProperty("some city");
+        this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+    }
 
-	public Person(String firstName, String lastName) {
-		this.firstName = new SimpleStringProperty(firstName);
-		this.lastName = new SimpleStringProperty(lastName);
+    public String getFirstName() {
+        return firstName.get();
+    }
 
-		// initial dummy data, just for testing
-		this.street = new SimpleStringProperty("some street");
-		this.postalCode = new SimpleIntegerProperty(1234);
-		this.city = new SimpleStringProperty("some city");
-		this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+    public void setFirstName(String firstName) {
+        this.firstName.set(firstName);
+    }
 
-	}
+    public StringProperty firstNameProperty() {
+        return firstName;
+    }
 
-	public String getFirstName() {
-		return firstName.get();
-	}
+    public String getLastName() {
+        return lastName.get();
+    }
 
-	public void setFirstName(String firstName){
-		this.firstName.set(firstName);
-	}
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
+    }
 
-	public StringProperty firstNameProperty(){
-		return firstName;
-	}
+    public StringProperty lastNameProperty() {
+        return lastName;
+    }
 
-	public String getLastName(){
-		return lastName.get();
-	}
+    public String getStreet() {
+        return street.get();
+    }
 
-	public void setLastName(String lastName){
-		this.lastName.set(lastName);
-	}
+    public void setStreet(String street) {
+        this.street.set(street);
+    }
 
-	public StringProperty lastNameProperty(){
-		return lastName;
-	}
+    public StringProperty streetProperty() {
+        return street;
+    }
 
-	public String getStreet(){
-		return street.get();
-	}
+    public int getPostalCode() {
+        return postalCode.get();
+    }
 
-	public void setStreet(String street){
-		this.street.set(street);
-	}
+    public void setPostalCode(int postalCode) {
+        this.postalCode.set(postalCode);
+    }
 
-	public StringProperty streetProperty(){
-		return street;
-	}
+    public IntegerProperty postalCodeProperty() {
+        return postalCode;
+    }
 
-	public int getPostalCode(){
-		return postalCode.get();
-	}
+    public String getCity() {
+        return city.get();
+    }
 
-	public void setPostalCode(int postalCode){
-		this.postalCode.set(postalCode);
-	}
+    public void setCity(String city) {
+        this.city.set(city);
+    }
 
-	public IntegerProperty postalCodeProperty(){
-		return postalCode;
-	}
+    public StringProperty cityProperty() {
+        return city;
+    }
 
-	public String getCity(){
-		return city.get();
-	}
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    public LocalDate getBirthday() {
+        return birthday.get();
+    }
 
-	public void setCity(String city){
-		this.city.set(city);
-	}
+    public void setBirthday(LocalDate birthday) {
+        this.birthday.set(birthday);
+    }
 
-	public StringProperty cityProperty(){
-		return city;
-	}
-
-	public LocalDate getBirthday(){
-		return birthday.get();
-	}
-
-	public void setBirthday(LocalDate birthday){
-		this.birthday.set(birthday);
-	}
-
-	public ObjectProperty<LocalDate> birthdayProperty(){
-		return birthday;
-	}
-
+    public ObjectProperty<LocalDate> birthdayProperty() {
+        return birthday;
+    }
 }
